@@ -1,0 +1,25 @@
+package program;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
+public class Main {
+
+	public static void main(String[] args) {
+		LocalDate d04 = LocalDate.parse("2022-07-20");
+		LocalDateTime d05 = LocalDateTime.parse("2022-07-20T01:30:26");
+		Instant d06 = Instant.parse("2022-07-20T01:30:26Z");
+		
+		// Retorna uma coleção com os nomes dos fuso horários customizados
+		
+		for(String s : ZoneId.getAvailableZoneIds()) {
+			System.out.println(s);
+		}
+		// Para converter a data-hora global para local, precisamos informar a data-global + timezone
+		
+
+	}
+
+}

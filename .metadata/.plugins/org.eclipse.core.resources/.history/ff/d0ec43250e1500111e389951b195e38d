@@ -1,0 +1,40 @@
+package program;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
+public class Main {
+	public static void main(String[] args) {
+		LocalDate d04 = LocalDate.parse("2022-07-20");
+		LocalDateTime d05 = LocalDateTime.parse("2022-07-20T01:30:26");
+		Instant d06 = Instant.parse("2022-07-20T01:30:26Z");
+		
+		// Criando LocalDate para 1 semana antes da variável d04
+		// minus() - subtrai tempo
+		// plus() - adiciona tempo
+		LocalDate pastWeekLocalDate = d04.minusDays(7); 
+		LocalDate nextWeekLocalDate = d04.plusDays(7);
+		
+		System.out.println("pastWeekLocalDate = " + pastWeekLocalDate);
+		System.out.println("nextWeekLocalDate = " + nextWeekLocalDate);
+		System.out.println();
+		
+		// Com LocalDateTime existem outras medidas devido ao horário
+		LocalDateTime pastWeekLocalDateTime = d05.minusDays(7); 
+		LocalDateTime nextWeekLocalDateTime = d05.plusDays(7);
+		
+		System.out.println("pastWeekLocalDateTime = " + pastWeekLocalDateTime);
+
+		// Com Instant
+		Instant pastWeekInstant = d06.minus(7, ChronoUnit.DAYS); // Passa uma quantia e um TemporalUnit (Dia, semana, mês) 
+		Instant nextWeekInstant = d06.plus(7, ChronoUnit.DAYS);
+		
+		System.out.println("pastWeekInstant = " + pastWeekInstant);
+		System.out.println("nextWeekInstant = " + nextWeekInstant);
+	}
+	
+
+
+}

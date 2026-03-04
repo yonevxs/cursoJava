@@ -1,0 +1,58 @@
+package program;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
+public class Main {
+	public static void main(String[] args) {
+		LocalDate d04 = LocalDate.parse("2022-07-20");
+		LocalDateTime d05 = LocalDateTime.parse("2022-07-20T01:30:26");
+		Instant d06 = Instant.parse("2022-07-20T01:30:26Z");
+		
+		// Criando LocalDate para 1 semana antes da variável d04
+		// minus() - subtrai tempo
+		// plus() - adiciona tempo
+		LocalDate pastWeekLocalDate = d04.minusDays(7); 
+		LocalDate nextWeekLocalDate = d04.plusDays(7);
+		
+		System.out.println("pastWeekLocalDate = " + pastWeekLocalDate);
+		System.out.println("nextWeekLocalDate = " + nextWeekLocalDate);
+		System.out.println();
+		
+		// Com LocalDateTime existem outras medidas devido ao horário
+		LocalDateTime pastWeekLocalDateTime = d05.minusDays(7); 
+		LocalDateTime nextWeekLocalDateTime = d05.plusDays(7);
+		
+		System.out.println("pastWeekLocalDateTime = " + pastWeekLocalDateTime);
+		System.out.println("nextWeekLocalDateTime = " + nextWeekLocalDateTime);
+		System.out.println();
+		// Com Instant
+		Instant pastWeekInstant = d06.minus(7, ChronoUnit.DAYS); // Passa uma quantia e um TemporalUnit (Dia, semana, mês) 
+		Instant nextWeekInstant = d06.plus(7, ChronoUnit.DAYS);
+		
+		System.out.println("pastWeekInstant = " + pastWeekInstant);
+		System.out.println("nextWeekInstant = " + nextWeekInstant);
+		System.out.println();
+		
+		// Descobrindo duração entre duas Data-horas - Classe Duration
+		Duration t1 = Duration.between(pastWeekLocalDateTime, d05);
+		System.out.println("t1 diferença de dias = " + t1.toDays() ); // métodos de diferença entre dias, horas, minutos etc
+		
+		// Erro por ser LocalDate, não tem informação de tempo - CONVERTA PARA LOCALDATETIME
+		Duration t2 = Duration.between(pastWeekLocalDate.atStartOfDay(), d04.atTime(0, 0)); // atTime(0, 0) - 0 horas, 0 minutos
+		// atStartOfDay() - Converte a data para LocalDateTime a meia noite (inicio do dia)
+		System.out.println("t2 diferença de dias = " + t2.toDays());
+		
+		Duration t3 = Duration.between(pastWeekInstant, d06);
+		System.out.println("t3 diferença de dias = " + t3.toDays());
+		
+		Duration t4 = Duration.between(d06, pastWeekInstant); // data mais a frente X data mais antiga
+		System.out.println("t4 diferença de dias = " + t4.toDays()); // retorna valor negativo, pois a primeira data é posterior a segunda data
+	}
+	
+
+
+}

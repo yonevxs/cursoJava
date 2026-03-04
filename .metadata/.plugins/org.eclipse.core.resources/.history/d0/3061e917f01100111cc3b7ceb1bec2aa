@@ -1,0 +1,49 @@
+package program;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		// Instanciando a data de agora - SEM FUSO HORÁRIO
+		LocalDate d01 = LocalDate.now();
+		LocalDateTime d02 = LocalDateTime.now();
+		      
+		System.out.println("D01 - " + d01);
+		System.out.println("D02 - " + d02);
+		
+		// Instanciando data de agora - COM FUSO HORÁRIO
+		Instant d03 = Instant.now(); // Puxando o fuso horário de Londres (GMT) - 3 horas a frente
+		System.out.println("D03 - " + d03);
+		
+		// Pegando texto ISO e gerando Data-hora
+		LocalDate d04 = LocalDate.parse("2022-07-20"); // Texto representando data no formato ISO 8601 
+		System.out.println("D04 - " + d04);
+		
+		LocalDateTime d05 = LocalDateTime.parse("2022-07-20T23:01:27"); // Texto representando data no formato ISO 8601 
+		System.out.println("D05 - " + d05);
+		
+		// O toString() dos 3 tipos acima, por padrão, gera um texto no formato ISO8601
+		
+		Instant d06 = Instant.parse("2022-07-20T23:01:27Z"); // Gera uma data-hora no padrão UTC (horário de Londres)
+		System.out.println("D06 - " + d06);
+		
+		// E se eu quiser pegar o meu fuso horário e instanciar, mas quero que o Java armazene o horário em Zulu? Horário de Londres
+		Instant d07 = Instant.parse("2022-07-20T23:01:27-03:00"); // Formato ISO 8601 com formato diferente do GMT
+		System.out.println("D07 - " + d07);
+		
+		// Texto em formato customizado
+		DateTimeFormatter fmt1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
+		LocalDate d08 = LocalDate.parse("20/07/2022", fmt1);
+		System.out.println("D08 - " + d08);
+		
+		
+
+	}
+
+}

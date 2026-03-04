@@ -1,0 +1,10 @@
+bin/
+target/
+*.class
+*.jar
+*.war
+*.ear
+.metadata/
+*.log
+*.tmp
+*.bak
