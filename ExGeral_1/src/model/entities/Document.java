@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 import model.exceptions.DomainException;
 
 public abstract class Document implements Comparable<Document>{
-	DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	
 	private String id;
 	private LocalDate date;

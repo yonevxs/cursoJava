@@ -26,8 +26,6 @@ public class Main {
 		System.out.print("Enter file path: ");
 		String strPath = sc.nextLine();
 		
-		File path = new File(strPath);
-		
 		try(BufferedReader br = new BufferedReader(new FileReader(strPath))){
 			String lineCSV = br.readLine();
 			
@@ -52,6 +50,9 @@ public class Main {
 			}
 			
 			CalculationService.copy(docs, history);
+			System.out.println("TOTAL REGISTERS COPIED TO HISTORY: " + history.size());
+			
+			System.out.println("MOST EXPENSIVE DOCUMENT: ");
 			System.out.println(CalculationService.max(docs));
 		}
 		catch (IOException e) {

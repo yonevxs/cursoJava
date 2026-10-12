@@ -17,7 +17,7 @@ public class CalculationService {
 		return max;
 	}
 	
-	public static <T> void copy(List<? extends T> source, List<? super T> target) { // Por que colocar <T> após static?
+	public static <T> void copy(List<? extends T> source, List<? super T> target) {
 		for(T obj : source) {
 			target.add(obj);
 		}

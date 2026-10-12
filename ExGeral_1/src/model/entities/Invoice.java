@@ -22,8 +22,4 @@ public class Invoice extends Document{
 	public Double total() {
 		return getBaseAmount() + (getBaseAmount() * taxPercent / 100);
 	}
-	
-	
-	// Não vou colocar o compareTo() que está no Document porque Invoice e ServiceContract são as minhas dependências
-	// Logo, não há necessidade de implementar o compareTo nessas classes, já que ambos são documentos (Document)
 }
