@@ -1,5 +1,100 @@
 package model.dao.impl;
 
-public class SellerDaoJDBC {
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import db.DB;
+import db.DBException;
+import model.dao.SellerDao;
+import model.entities.Department;
+import model.entities.Seller;
+
+public class SellerDaoJDBC implements SellerDao {
+	// Dependência com a conexão
+	private Connection connection;
+	
+	// Forçando injeção de dependência
+	public SellerDaoJDBC(Connection connection) {
+		this.connection = connection;
+	}
+
+	@Override
+	public void insert(Seller obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Seller obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteById(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Seller findById(Integer id) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = connection.prepareStatement(
+					"SELECT seller.*,department.Name as DepName "
+					+ "FROM seller INNER JOIN department "
+					+ "ON seller.DepartmentId = department.Id "
+					+ "WHERE seller.Id = ?");
+			
+			st.setInt(1, id);
+			rs = st.executeQuery();
+			
+			// Obtendo os objetos associados instanciados na memória
+			// O resultado de uma consulta SQL no ResultSet aponta para a posição 0 (não contém objetos, somente na posição 1)
+			
+			// Se minha consulta tiver algum registro
+			if (rs.next()) {
+				Department dep = instantiateDepartment(rs);
+				Seller seller = instantiateSeller(rs, dep);
+				
+				return seller;
+			}
+			return null;
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+		
+	}
+
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		Seller seller = new Seller();
+		seller.setId(rs.getInt("Id"));
+		seller.setName(rs.getString("Name"));
+		seller.setEmail(rs.getString("Email"));
+		seller.setBaseSalary(rs.getDouble("BaseSalary"));
+		seller.setBirthDate(rs.getDate("BirthDate"));
+		seller.setDepartment(dep); // Associação de objetos - Departamento associado ao Vendedor (seller)
+		return seller;
+	}
+
+	private Department instantiateDepartment(ResultSet rs) throws SQLException { // Propagando exceção
+		Department dept = new Department();
+		dept.setId(rs.getInt("DepartmentId")); // Acessando a coluna DepartmentId
+		dept.setName(rs.getString("DepName"));
+		return dept;
+	}
+
+	@Override
+	public List<Seller> findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
