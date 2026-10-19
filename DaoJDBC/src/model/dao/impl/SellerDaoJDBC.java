@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import db.DB;
 import db.DBException;
@@ -93,8 +96,86 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public List<Seller> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = connection.prepareStatement(
+					"SELECT seller.*,department.Name as DepName "
+					+ "FROM seller INNER JOIN department "
+					+ "ON seller.DepartmentId = department.Id "
+					+ "ORDER BY Name");
+			
+			rs = st.executeQuery();
+			
+			List<Seller> list = new ArrayList<>();
+			Map<Integer, Department> map = new HashMap<>();
+			
+			while (rs.next()) {
+				Department dept = map.get(rs.getInt("DepartmentId"));
+				
+				if (dept == null) {
+					dept = instantiateDepartment(rs);
+					map.put(rs.getInt("DepartmentId"), dept);
+				}
+				
+				Seller seller = instantiateSeller(rs, dept);
+				list.add(seller);
+			}
+			return list;
+			
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
+	}
+
+	@Override
+	public List<Seller> findByDepartment(Department department) {
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		
+		try {
+			st = connection.prepareStatement(
+					"SELECT seller.*,department.Name as DepName "
+					+ "FROM seller INNER JOIN department "
+					+ "ON seller.DepartmentId = department.Id "
+					+ "WHERE DepartmentId = ? "
+					+ "ORDER BY Name");
+			
+			st.setInt(1, department.getId());
+			rs = st.executeQuery();
+			
+			// O tipo de retorno é uma lista de Seller, e os registros no banco são muitos, então ao invés do if, iremos percorrer
+			// o ResultSet enquanto há registros
+			List<Seller> list = new ArrayList<>();
+			
+			// Para não repetirmos o departamento, iremos utilizar Map - Irá guardar qualquer departamento instanciado
+			Map<Integer, Department> map = new HashMap<>();
+			while (rs.next()) {
+				// Cada vez que passar no while, iremos testar se o departamento já existe
+				// Buscando um departamento com determinado Id - Valor está na coluna DepartmentId do nosso banco
+				Department dept = map.get(rs.getInt("DepartmentId"));
+				
+				if (dept == null) {
+					dept = instantiateDepartment(rs); // Se o valor for nulo, iremos instanciar um novo dept a partir do ResultSet
+					
+					// Salvando no map para a próxima verificação
+					map.put(rs.getInt("DepartmentId"), dept);
+				}
+				
+				Seller seller = instantiateSeller(rs, dept);
+				list.add(seller);
+			}
+			return list;
+		} catch (SQLException e) {
+			throw new DBException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 	}
 
 }
